@@ -47,7 +47,6 @@
     document.body.insertBefore(overlayDiv, document.body.firstChild);
     this.displayNextAndPreviousButtons(overlayInnerDiv);
     this.lightBoxClickHandler(overlayDiv)
-    this.keyBoardPressedHandler(overlayDiv);
   }
 
   this.PureBox.prototype.displayNextAndPreviousButtons = function(lightBoxElement) {
