@@ -1,12 +1,16 @@
-(function (options) {
+(function () {
 
-  var instagramFeedThis;
+  // Used to maintain the correct this context to InstagramFeed
+  // in the jsonp callback function
+  var InstagramFeedThisContext;
+
   this.InstagramFeed = function(options, appContianer) {
-    instagramFeedThis = this;
+    InstagramFeedThisContext = this;
     this.appContianer = appContianer;
     this.clientId = options.clientId;
     this.redirectUri = options.redirectUri;
-    this.checkForInstagramToken()
+    this.checkForInstagramToken();
+    this.getPhotos();
   }
 
   this.InstagramFeed.prototype.checkForInstagramToken = function(callback) {
@@ -15,30 +19,28 @@
       localStorage.instagramToken = instagramToken;
       window.location = window.location.href.split('#')[0]
     }
+  }
+
+  this.InstagramFeed.prototype.getPhotos = function() {
+    var token = localStorage.instagramToken;
     if(localStorage.instagramToken) {
-      this.getPhotos(localStorage.instagramToken);
+      var script = document.createElement('script');
+      script.src = 'https://api.instagram.com/v1/users/self/media/recent?access_token=' + token + '&callback=processJSONPResponse';
+      document.querySelector('head').appendChild(script);
     } else {
       this.makeLoginButtonElement()
     }
   }
 
-  this.InstagramFeed.prototype.getPhotos = function(token) {
-    var script = document.createElement('script');
-    script.src = 'https://api.instagram.com/v1/users/self/media/recent?access_token=' + token + '&callback=processJSONPResponse';
-    document.querySelector('head').appendChild(script);
-  }
-
   this.processJSONPResponse = function(data) {
     if(data.meta.code === 200) {
-      instagramFeedThis.displayPhotos(data);
+      InstagramFeedThisContext.displayPhotos(data.data);
     }
   }
 
   this.InstagramFeed.prototype.displayPhotos = function(data) {
-    if(data.meta.code === 200) {
-      for(var i = 0; i < data.data.length; i++) {
-        this.makePhotoElement(data.data[i])
-      }
+    for(var i = 0; i < data.length; i++) {
+      this.makePhotoElement(data[i])
     }
   }
 
