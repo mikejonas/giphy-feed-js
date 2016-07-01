@@ -1,0 +1,31 @@
+* {
+  margin:0;
+  padding:0;
+}
+body {
+  background: #eee;
+}
+.container {
+  width:800px;
+  margin: 0 auto;
+}
+
+.instagram-photo {
+  float:left;
+  margin: 5px;
+}
+
+.pure-box-overlay {
+  background:rgba(0,0,0, 0.8);
+  width:100%;
+  height: 100%;
+  position:fixed;
+}
+
+.pure-box-overlay-inner {
+  margin: 30px auto 0 auto;
+  width: 400px;
+}
+.pure-box-overlay-inner img {
+  width: 400px;
+}
