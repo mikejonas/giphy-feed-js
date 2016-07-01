@@ -4,7 +4,7 @@
     this.appContainer = appContainer || document.body;
     this.ClickHandlerInit();
     this.photos = [];
-    this.currentPhoto;
+    this.currentPhotoIndex;
   }
 
   this.PureBox.prototype.ClickHandlerInit = function() {
@@ -62,24 +62,30 @@
     arrowButtonInner.className = className;
     arrowButton.appendChild(arrowButtonInner);
     lightBoxElement.appendChild(arrowButton);
-    arrowButton.onClick = function(e) {
-
-    }
   }
 
   this.PureBox.prototype.lightBoxClickHandler = function(overlayDiv) {
     overlayDiv.onclick = function(e) {
-      console.log(e.target);
       if(e.target.matches('.pure-box-overlay')) {
         this.closeLightBox(overlayDiv);
       }
-      if(e.target.matches('.pure-box-overlay')) {
-        this.closeLightBox(overlayDiv);
-      }
-      if(e.target.matches('.pure-box-overlay')) {
-        this.closeLightBox(overlayDiv);
+      if(e.target.matches('.next') || e.target.matches('.prev')) {
+        this.navigateToImage(overlayDiv, e.target.matches('.next'));
       }
     }.bind(this);
+  }
+
+  this.PureBox.prototype.navigateToImage = function(overlayDiv, goForward) {
+    goForward ? this.currentPhotoIndex++ : this.currentPhotoIndex--
+
+    if(this.currentPhotoIndex > this.photos.length - 1) { this.currentPhotoIndex = 0; }
+    if(this.currentPhotoIndex < 0) { this.currentPhotoIndex = this.photos.length - 1; }
+
+    var nextImage = this.photos[this.currentPhotoIndex];
+    var image = overlayDiv.getElementsByTagName('img')[0];
+    var caption = overlayDiv.getElementsByClassName('pure-box-caption')[0]
+    image.src = nextImage.href
+    caption.innerText = nextImage.title;
   }
 
 }());
