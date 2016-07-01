@@ -54,7 +54,7 @@
 
     div.className='instagram-photo';
     div.appendChild(a);
-    a.href = '#';
+    a.href = imageFull;
     a.title = caption;
     a.className ='pure-box';
     a.appendChild(img);
