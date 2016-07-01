@@ -25,43 +25,51 @@ body {
 }
 
 .pure-box-overlay-inner {
-  margin: 0 auto;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 400px;
+  margin: 20px auto 0 auto;
+  width: 80%;
+  height: 80%;
 }
-.pure-box-overlay-inner img {
-  width: 400px;
-  display: block;
+.pure-box-overlay .pure-box-image {
+  background-size: contain;
+  height:100%;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.pure-box-overlay-inner .pure-box-caption {
-  background: #fff;
+.pure-box-overlay .pure-box-caption {
   padding:5px 10px;
+  color: #fff;
+  text-align: center;
 }
-.pure-box-overlay-inner .next-prev {
+.pure-box-overlay .next-prev {
   position: absolute;
   height: 100%;
-  width: 50px;
+  width: 80px;
   color: #fff;
+  opacity: .7;
 }
 
-.pure-box-overlay-inner .next-prev:hover {
+.pure-box-overlay .next-prev:hover {
   background:rgba(0,0,0, 0.2);
   cursor: pointer;
 }
 
-.pure-box-overlay-inner .prev {
+.pure-box-overlay .prev {
   top:0;
   left:0;
 }
 
-.pure-box-overlay-inner .next {
+.pure-box-overlay .next {
   top: 0;
   right:0;
 }
+.pure-box-overlay span.next {
+  float: right;
+}
+.pure-box-overlay span.prev {
+  float: left;
+}
 
-.pure-box-overlay-inner .next-prev span {
+.pure-box-overlay .next-prev span {
   padding:20px;
   font-size:50px;
   position: relative;

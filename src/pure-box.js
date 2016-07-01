@@ -33,17 +33,19 @@
   this.PureBox.prototype.createLightBoxElement = function(imageUrl, title) {
     var overlayDiv = document.createElement('div')
     var overlayInnerDiv = document.createElement('div')
-    var img = document.createElement('img')
+    var img = document.createElement('div')
     var captionDiv = document.createElement('div')
     var captionText = document.createTextNode(title);
     overlayDiv.className = 'pure-box-overlay';
     overlayInnerDiv.className = 'pure-box-overlay-inner';
-    img.src = imageUrl
+    img.className = 'pure-box-image'
+    img.style.backgroundImage = "url('"+ imageUrl +"')"
     captionDiv.className = 'pure-box-caption';
     captionDiv.appendChild(captionText);
     overlayDiv.appendChild(overlayInnerDiv);
+    overlayDiv.appendChild(captionDiv);
+
     overlayInnerDiv.appendChild(img);
-    overlayInnerDiv.appendChild(captionDiv);
     document.body.insertBefore(overlayDiv, document.body.firstChild);
     this.displayNextAndPreviousButtons(overlayInnerDiv);
     this.lightBoxClickHandler(overlayDiv)
@@ -66,11 +68,14 @@
 
   this.PureBox.prototype.lightBoxClickHandler = function(overlayDiv) {
     overlayDiv.onclick = function(e) {
-      if(e.target.matches('.pure-box-overlay')) {
+      console.log(e.target);
+      if(e.target.matches('.pure-box-overlay') || e.target.matches('.pure-box-image')) {
         this.closeLightBox(overlayDiv);
       }
       if(e.target.matches('.next') || e.target.matches('.prev')) {
         this.navigateToImage(overlayDiv, e.target.matches('.next'));
+      } else {
+
       }
     }.bind(this);
 
@@ -88,9 +93,9 @@
     if(this.currentPhotoIndex < 0) { this.currentPhotoIndex = this.photos.length - 1; }
 
     var nextImage = this.photos[this.currentPhotoIndex];
-    var image = overlayDiv.getElementsByTagName('img')[0];
+    var image = overlayDiv.getElementsByClassName('pure-box-image')[0];
     var caption = overlayDiv.getElementsByClassName('pure-box-caption')[0]
-    image.src = nextImage.href
+    image.style.backgroundImage = "url('"+ nextImage.href +"')"
     caption.innerText = nextImage.title;
   }
 
