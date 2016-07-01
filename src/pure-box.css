@@ -4,6 +4,8 @@
 }
 body {
   background: #eee;
+  font-family: helvetica;
+  font-size: 16px;
 }
 .container {
   width:800px;
@@ -28,4 +30,9 @@ body {
 }
 .pure-box-overlay-inner img {
   width: 400px;
+  display: block;
+}
+.pure-box-overlay-inner .pure-box-caption {
+  background: #fff;
+  padding:5px 10px;
 }
