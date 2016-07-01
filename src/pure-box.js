@@ -47,6 +47,7 @@
     document.body.insertBefore(overlayDiv, document.body.firstChild);
     this.displayNextAndPreviousButtons(overlayInnerDiv);
     this.lightBoxClickHandler(overlayDiv)
+    this.keyBoardPressedHandler(overlayDiv);
   }
 
   this.PureBox.prototype.displayNextAndPreviousButtons = function(lightBoxElement) {
@@ -72,6 +73,11 @@
       if(e.target.matches('.next') || e.target.matches('.prev')) {
         this.navigateToImage(overlayDiv, e.target.matches('.next'));
       }
+    }.bind(this);
+
+    document.onkeydown = function(e) {
+      if (e.keyCode == '37') { this.navigateToImage(overlayDiv, false); }
+      if (e.keyCode == '39') { this.navigateToImage(overlayDiv, true); }
     }.bind(this);
   }
 
