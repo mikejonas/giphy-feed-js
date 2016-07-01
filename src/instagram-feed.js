@@ -4,9 +4,9 @@
   // in the jsonp callback function
   var InstagramFeedThisContext;
 
-  this.InstagramFeed = function(options, appContianer) {
+  this.InstagramFeed = function(options, appContainer) {
     InstagramFeedThisContext = this;
-    this.appContianer = appContianer;
+    this.appContainer = appContainer;
     this.clientId = options.clientId;
     this.redirectUri = options.redirectUri;
     this.checkForInstagramToken();
@@ -48,15 +48,19 @@
     var imageThumbnail = photoData.images.thumbnail.url;
     var imageFull = photoData.images.standard_resolution.url;
     var caption = photoData.caption.text;
-
+    var div = document.createElement('div')
     var a = document.createElement('a');
     var img = document.createElement('img');
-    a.href = imageFull;
+
+    div.className='instagram-photo';
+    div.appendChild(a);
+    a.href = '#';
     a.title = caption;
+    a.className ='pure-box';
     a.appendChild(img);
     img.src = imageThumbnail;
 
-    this.appContianer.appendChild(a);
+    this.appContainer.appendChild(div);
   }
 
   this.InstagramFeed.prototype.makeLoginButtonElement = function() {
@@ -70,8 +74,8 @@
   }
 
   this.InstagramFeed.prototype.clearElements = function() {
-    while (this.appContianer.hasChildNodes()) {
-      this.appContianer.removeChild(this.appContianer.firstChild);
+    while (this.appContainer.hasChildNodes()) {
+      this.appContainer.removeChild(this.appContainer.firstChild);
     }
   }
 
