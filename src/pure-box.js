@@ -77,6 +77,7 @@
     document.onkeydown = function(e) {
       if (e.keyCode == '37') { this.navigateToImage(overlayDiv, false); }
       if (e.keyCode == '39') { this.navigateToImage(overlayDiv, true); }
+      if (e.keyCode == '27') { this.closeLightBox(overlayDiv); }
     }.bind(this);
   }
 
