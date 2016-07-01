@@ -28,6 +28,7 @@
 
   this.PureBox.prototype.closeLightBox = function(element) {
     element.parentElement.removeChild(element);
+    document.onkeydown = null
   }
 
   this.PureBox.prototype.createLightBoxElement = function(imageUrl, title) {
@@ -68,7 +69,6 @@
 
   this.PureBox.prototype.lightBoxClickHandler = function(overlayDiv) {
     overlayDiv.onclick = function(e) {
-      console.log(e.target);
       if(e.target.matches('.pure-box-overlay') || e.target.matches('.pure-box-image')) {
         this.closeLightBox(overlayDiv);
       }
@@ -80,6 +80,7 @@
     }.bind(this);
 
     document.onkeydown = function(e) {
+      e.preventDefault();
       if (e.keyCode == '37') { this.navigateToImage(overlayDiv, false); }
       if (e.keyCode == '39') { this.navigateToImage(overlayDiv, true); }
       if (e.keyCode == '27') { this.closeLightBox(overlayDiv); }

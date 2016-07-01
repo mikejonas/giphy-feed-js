@@ -50,6 +50,7 @@ body {
 
 .pure-box-overlay .next-prev:hover {
   background:rgba(0,0,0, 0.2);
+  opacity: .8;
   cursor: pointer;
 }
 
