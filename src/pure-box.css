@@ -39,3 +39,32 @@ body {
   background: #fff;
   padding:5px 10px;
 }
+.pure-box-overlay-inner .next-prev {
+  position: absolute;
+  height: 100%;
+  width: 50px;
+  color: #fff;
+}
+
+.pure-box-overlay-inner .next-prev:hover {
+  background:rgba(0,0,0, 0.2);
+  cursor: pointer;
+}
+
+.pure-box-overlay-inner .prev {
+  top:0;
+  left:0;
+}
+
+.pure-box-overlay-inner .next {
+  top: 0;
+  right:0;
+}
+
+.pure-box-overlay-inner .next-prev span {
+  padding:20px;
+  font-size:50px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
