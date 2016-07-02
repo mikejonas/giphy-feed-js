@@ -9,6 +9,7 @@
     this.appContainer = appContainer;
     this.clientId = options.clientId;
     this.redirectUri = options.redirectUri;
+    this.numberOfColumns = options.numberOfColumns || 3;
     this.checkForInstagramToken();
     this.getPhotos();
   }
@@ -39,13 +40,27 @@
   }
 
   this.InstagramFeed.prototype.displayPhotos = function(data) {
-    for(var i = 0; i < data.length; i++) {
-      this.makePhotoElement(data[i])
+    this.makeColumnElements(function(columns) {
+      for(var i = 0; i < data.length; i++) {
+        var columnIndex = i % columns.length;
+        this.makePhotoElement(data[i], columns[columnIndex])
+      }
+    }.bind(this));
+
+  }
+  this.InstagramFeed.prototype.makeColumnElements = function(callback) {
+    var columns = [];
+    for(var i = 0; i < this.numberOfColumns; i++) {
+      var div = document.createElement('div');
+      div.className = 'column';
+      columns.push(div)
+      this.appContainer.appendChild(div);
     }
+    callback(columns);
   }
 
-  this.InstagramFeed.prototype.makePhotoElement = function(photoData) {
-    var imageThumbnail = photoData.images.thumbnail.url;
+  this.InstagramFeed.prototype.makePhotoElement = function(photoData, parent) {
+    var imageThumbnail = photoData.images.low_resolution.url;
     var imageFull = photoData.images.standard_resolution.url;
     var caption = photoData.caption.text;
     var div = document.createElement('div')
@@ -60,7 +75,7 @@
     a.appendChild(img);
     img.src = imageThumbnail;
 
-    this.appContainer.appendChild(div);
+    parent.appendChild(div);
   }
 
   this.InstagramFeed.prototype.makeLoginButtonElement = function() {
@@ -89,4 +104,7 @@
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
+
+
+
 }());
