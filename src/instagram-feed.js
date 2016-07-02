@@ -9,7 +9,11 @@
     this.appContainer = appContainer;
     this.clientId = options.clientId;
     this.redirectUri = options.redirectUri;
-    this.numberOfColumns = options.numberOfColumns || 3;
+    this.columns = {
+      count: options.numberOfColumns || 3,
+      elements: [],
+      heights: []
+    };
     this.checkForInstagramToken();
     this.getPhotos();
   }
@@ -40,29 +44,28 @@
   }
 
   this.InstagramFeed.prototype.displayPhotos = function(data) {
-    this.makeColumnElements(function(columns) {
-      for(var i = 0; i < data.length; i++) {
-        var columnIndex = i % columns.length;
-        this.makePhotoElement(data[i], columns[columnIndex])
-      }
-    }.bind(this));
+    this.makeColumnElements();
+    for(var i = 0; i < data.length; i++) {
+      var smallestColumnIndex = this.columns.heights.indexOf(Math.min.apply(Math, this.columns.heights));
 
+      this.makePhotoElement(data[i], smallestColumnIndex);
+    }
   }
-  this.InstagramFeed.prototype.makeColumnElements = function(callback) {
-    var columns = [];
-    for(var i = 0; i < this.numberOfColumns; i++) {
+
+  this.InstagramFeed.prototype.makeColumnElements = function() {
+    for(var i = 0; i < this.columns.count; i++) {
       var div = document.createElement('div');
       div.className = 'column';
-      div.style.width = 100 / this.numberOfColumns + '%';
-      columns.push(div)
+      div.style.width = 100 / this.columns.count + '%';
+      this.columns.elements.push(div);
+      this.columns.heights.push(0);
       this.appContainer.appendChild(div);
     }
-    callback(columns);
   }
 
-  this.InstagramFeed.prototype.makePhotoElement = function(photoData, parent) {
-    var imageThumbnail = photoData.images.low_resolution.url;
-    var imageFull = photoData.images.standard_resolution.url;
+  this.InstagramFeed.prototype.makePhotoElement = function(photoData, columnIndex) {
+    var imageThumbnail = photoData.images.low_resolution;
+    var imageFull = photoData.images.standard_resolution;
     var caption = photoData.caption.text;
     var div = document.createElement('div')
     var a = document.createElement('a');
@@ -70,13 +73,18 @@
 
     div.className='instagram-photo';
     div.appendChild(a);
-    a.href = imageFull;
+    a.href = imageFull.url;
     a.title = caption;
     a.className ='pure-box';
     a.appendChild(img);
-    img.src = imageThumbnail;
+    img.src = imageThumbnail.url;
 
-    parent.appendChild(div);
+    this.columns.heights[columnIndex] += imageThumbnail.height;
+    this.columns.elements[columnIndex].appendChild(div);
+  }
+
+  this.getSmallestColumn = function() {
+
   }
 
   this.InstagramFeed.prototype.makeLoginButtonElement = function() {
