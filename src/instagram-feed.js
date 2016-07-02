@@ -14,6 +14,7 @@
       elements: [],
       heights: []
     };
+    this.appendedPhotos = 0;
     this.checkForInstagramToken();
     this.getPhotos();
   }
@@ -76,6 +77,8 @@
     a.href = imageFull.url;
     a.title = caption;
     a.className ='pure-box';
+    a.setAttribute('data-index', this.appendedPhotos++)
+
     a.appendChild(img);
     img.src = imageThumbnail.url;
 

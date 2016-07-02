@@ -22,8 +22,15 @@
 
   this.PureBox.prototype.openLightBox = function(element) {
     this.createLightBoxElement(element.href, element.title);
-    this.photos = this.appContainer.getElementsByClassName('pure-box');
-    this.currentPhotoIndex = Array.prototype.indexOf.call(this.photos, element);
+    this.photos = Array.prototype.slice.call(this.appContainer.getElementsByClassName('pure-box'));
+
+    //Sort photos by data-index if available
+    if(element.dataset.index) {
+      this.photos = this.photos.sort(function(a,b) {
+        return a.dataset.index - b.dataset.index;
+      });
+    }
+    this.currentPhotoIndex = element.dataset.index || this.photos.indexOf(element);
   }
 
   this.PureBox.prototype.closeLightBox = function(element) {
