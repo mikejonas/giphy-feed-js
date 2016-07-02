@@ -53,6 +53,7 @@
     for(var i = 0; i < this.numberOfColumns; i++) {
       var div = document.createElement('div');
       div.className = 'column';
+      div.style.width = 100 / this.numberOfColumns + '%';
       columns.push(div)
       this.appContainer.appendChild(div);
     }
