@@ -134,12 +134,13 @@
         window.scrollTo(0, yOffset);
       }
     }.bind(this);
-
-    window.onscroll = function(ev) {
-      if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight && !this.isLoadingImages) {
-        this.getPhotos();
-      }
-    }.bind(this);
+    if(this.infiniteScroll) {
+      window.onscroll = function(ev) {
+        if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight && !this.isLoadingImages) {
+          this.getPhotos();
+        }
+      }.bind(this);
+    }
 
   }
 
