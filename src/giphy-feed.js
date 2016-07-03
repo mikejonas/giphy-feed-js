@@ -20,7 +20,7 @@
   }
 
   this.GiphyFeed.prototype.getPhotos = function() {
-    var giphyURl = this.buildGiphyUrl(this.apiKey, this.giphyApiOptions);
+    var giphyURl = buildGiphyUrl(this.apiKey, this.giphyApiOptions);
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
       if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
@@ -61,7 +61,7 @@
   this.GiphyFeed.prototype.makePhotoElement = function(photoData, columnIndex) {
     var imageThumbnail = photoData.images.original_still;
     var imageFull = photoData.images.original;
-    var caption = this.extractHashTagsFromSlug(photoData.slug)
+    var caption = extractHashTagsFromSlug(photoData.slug)
     var div = document.createElement('div')
     var a = document.createElement('a');
     var img = document.createElement('img');
@@ -97,13 +97,15 @@
     }.bind(this);
   }
 
-  this.GiphyFeed.prototype.extractHashTagsFromSlug = function(slug) {
+
+  //Helpers
+  function extractHashTagsFromSlug(slug) {
     var tags = slug.split('-')
     tags = tags.slice(0, tags.length - 1);
     return tags.map(function(tag) {return '#' + tag }).join(' ')
   }
 
-  this.GiphyFeed.prototype.buildGiphyUrl = function(apiKey, options) {
+  function buildGiphyUrl(apiKey, options) {
     var url = 'http://api.giphy.com/v1/gifs/search?api_key=' + apiKey;
     options.q = options.q ? options.q.split(' ').join('+') : '';
     for(var key in options) {
@@ -111,7 +113,6 @@
     }
     return url;
   }
-
 
   function setPhotoContainerMargins(margin) {
     return '0px ' + margin / 2 + 'px ' + margin + 'px ' + margin / 2 + 'px';
