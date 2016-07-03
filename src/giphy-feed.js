@@ -17,17 +17,20 @@
     this.isLoadingImages = false;
     this.appendedPhotos = 0;
     this.initializeWindowEventHandlers();
-    this.renderUI();
-    this.getPhotos();
+    this.renderUI(true);
   }
 
-  this.GiphyFeed.prototype.renderUI = function() {
+  this.GiphyFeed.prototype.renderUI = function(newSearch) {
     this.columns.heightRatios = [];
     this.columns.elements = [];
     this.appendedPhotos = 0;
     this.clearElements();
     this.makeSearchForm();
     this.makeColumnElements();
+    if(newSearch) {
+      this.photoData = [];
+      this.getPhotos();
+    }
   }
 
   this.GiphyFeed.prototype.makeSearchForm = function() {
@@ -49,7 +52,7 @@
     form.onsubmit = function(e) {
       if(this.giphyApiOptions.q !== input.value) {
         this.giphyApiOptions.q = input.value;
-        this.renderUI();
+        this.renderUI(true);
       }
       return false;
     }.bind(this);
