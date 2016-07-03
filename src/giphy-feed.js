@@ -3,13 +3,14 @@
   this.GiphyFeed = function(options, appContainer) {
     this.appContainer = appContainer;
     this.apiKey = options.apiKey;
+    this.photoMargin = options.photoMargin;
     this.minColumnWidth = options.minColumnWidth;
     this.giphyApiOptions = options.giphyApiOptions;
     this.searchTerm = options.searchTerm ? options.searchTerm.split(' ').join('+') : '';
     this.photoData;
     this.columns = {
       elements: [],
-      heights: [],
+      heightRatios: [],
       count: 0
     };
     this.appendedPhotos = 0;
@@ -35,14 +36,14 @@
     if (data) { this.photoData = data; }
     this.makeColumnElements();
     for(var i = 0; i < this.photoData.length; i++) {
-      var smallestColumnIndex = this.columns.heights.indexOf(Math.min.apply(Math, this.columns.heights));
+      var smallestColumnIndex = this.columns.heightRatios.indexOf(Math.min.apply(Math, this.columns.heightRatios));
 
       this.makePhotoElement(this.photoData[i], smallestColumnIndex);
     }
   }
 
   this.GiphyFeed.prototype.makeColumnElements = function() {
-    this.columns.heights = [];
+    this.columns.heightRatios = [];
     this.columns.elements = [];
     this.appendedPhotos = 0;
     this.clearElements()
@@ -52,7 +53,7 @@
       div.className = 'column';
       div.style.width = 100 / numberOfColumns + '%';
       this.columns.elements.push(div);
-      this.columns.heights.push(0);
+      this.columns.heightRatios.push(0);
       this.appContainer.appendChild(div);
     }
   }
@@ -67,6 +68,7 @@
 
     div.className='photo-container';
     div.appendChild(a);
+    div.style.margin = setPhotoContainerMargins(this.photoMargin);
     a.href = imageFull.url;
     a.title = caption;
     a.className ='pure-box';
@@ -74,8 +76,9 @@
     a.appendChild(img);
     img.src = imageThumbnail.url;
 
-    this.columns.heights[columnIndex] += parseInt(imageThumbnail.height);
+    this.columns.heightRatios[columnIndex] += parseInt(imageThumbnail.height) / parseInt(imageThumbnail.width);
     this.columns.elements[columnIndex].appendChild(div);
+    console.log(imageThumbnail, imageThumbnail.height);
   }
 
   this.GiphyFeed.prototype.clearElements = function() {
@@ -107,5 +110,10 @@
       url += '&' + key + '=' + options[key];
     }
     return url;
+  }
+
+
+  function setPhotoContainerMargins(margin) {
+    return '0px ' + margin / 2 + 'px ' + margin + 'px ' + margin / 2 + 'px';
   }
 }());

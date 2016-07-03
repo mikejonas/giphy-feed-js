@@ -16,7 +16,6 @@ body {
 }
 #giphyFeed .column {
   float: left;
-  padding: 10px;
 }
 #giphyFeed img {
   display: block;
@@ -25,7 +24,6 @@ body {
 }
 .photo-container {
   box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.17);
-  margin-bottom: 20px;
 }
 
 .pure-box-overlay {
