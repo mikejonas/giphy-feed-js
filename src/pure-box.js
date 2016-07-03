@@ -9,12 +9,12 @@
 
   this.PureBox.prototype.ClickHandlerInit = function() {
     this.appContainer.onclick = function(e) {
-      e.preventDefault()
       var element = e.target;
       while(!element.matches('.pure-box') && element !== this.appContainer && element) {
         element = element.parentElement;
       }
       if(element && element.matches('.pure-box')) {
+        e.preventDefault()
         this.openLightBox(element);
       }
     }.bind(this);
@@ -87,7 +87,10 @@
     }.bind(this);
 
     document.onkeydown = function(e) {
-      e.preventDefault()
+      //37: left arrow. 39: right arrow. 27: escape key.
+      if(e.keyCode == '37' || e.keyCode == '39' || e.keyCode == '27') {
+        e.preventDefault()
+      }
       if (e.keyCode == '37') { this.navigateToImage(overlayDiv, false); }
       if (e.keyCode == '39') { this.navigateToImage(overlayDiv, true); }
       if (e.keyCode == '27') { this.closeLightBox(overlayDiv); }
