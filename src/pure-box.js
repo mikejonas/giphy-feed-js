@@ -10,7 +10,7 @@
   this.PureBox.prototype.ClickHandlerInit = function() {
     this.appContainer.onclick = function(e) {
       var element = e.target;
-      while(!element.matches('.pure-box') && element !== this.appContainer && element) {
+      while(element && !element.matches('.pure-box') && element !== this.appContainer) {
         element = element.parentElement;
       }
       if(element && element.matches('.pure-box')) {

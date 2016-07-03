@@ -15,7 +15,7 @@
     };
     this.appendedPhotos = 0;
     this.windowResizeHandler();
-    this.getPhotos();
+    this.renderUI();
   }
 
   this.GiphyFeed.prototype.getPhotos = function() {
@@ -33,19 +33,49 @@
 
   this.GiphyFeed.prototype.displayPhotos = function(data) {
     if (data) { this.photoData = data; }
-    this.makeColumnElements();
     for(var i = 0; i < this.photoData.length; i++) {
       var smallestColumnIndex = this.columns.heightRatios.indexOf(Math.min.apply(Math, this.columns.heightRatios));
-
       this.makePhotoElement(this.photoData[i], smallestColumnIndex);
     }
+  }
+
+  this.GiphyFeed.prototype.renderUI = function() {
+    this.clearElements();
+    this.makeSearchForm();
+    this.makeColumnElements();
+    this.getPhotos();
+
+  }
+
+  this.GiphyFeed.prototype.makeSearchForm = function() {
+    var form = document.createElement('form');
+    var input = document.createElement('input');
+    var button = document.createElement('button');
+    form.className = 'giphy-search-form';
+    form.style.marginLeft = this.photoMargin / 2 + 'px';
+    form.style.marginRight = this.photoMargin / 2 + 'px';
+    input.type = 'text';
+    button.className = 'giphy-search-button'
+
+    button.appendChild(document.createTextNode('search'))
+    form.appendChild(input);
+    form.appendChild(button);
+    input.value = this.giphyApiOptions.q
+    this.appContainer.appendChild(form);
+
+    form.onsubmit = function(e) {
+      if(this.giphyApiOptions.q !== input.value) {
+        this.giphyApiOptions.q = input.value;
+        this.renderUI();
+      }
+      return false;
+    }.bind(this);
   }
 
   this.GiphyFeed.prototype.makeColumnElements = function() {
     this.columns.heightRatios = [];
     this.columns.elements = [];
     this.appendedPhotos = 0;
-    this.clearElements()
     this.columns.count = Math.floor(this.appContainer.offsetWidth / this.minColumnWidth);
     for(var i = 0; i < this.columns.count; i++) {
       var div = document.createElement('div');
@@ -67,13 +97,15 @@
 
     div.className='photo-container';
     div.appendChild(a);
-    div.style.margin = setPhotoContainerMargins(this.photoMargin);
+    div.style.margin = '0 ' + this.photoMargin / 2 + 'px ' + this.photoMargin + 'px ' + this.photoMargin / 2 + 'px';;
     a.href = imageFull.url;
     a.title = caption;
     a.className ='pure-box';
     a.setAttribute('data-index', this.appendedPhotos++)
     a.appendChild(img);
     img.src = imageThumbnail.url;
+    img.height = imageThumbnail.height;
+    img.width = imageThumbnail.width;
 
     this.columns.heightRatios[columnIndex] += parseInt(imageThumbnail.height) / parseInt(imageThumbnail.width);
     this.columns.elements[columnIndex].appendChild(div);
@@ -89,6 +121,7 @@
     window.onresize = function(e) {
       var numberOfColumns = Math.floor(this.appContainer.offsetWidth / this.minColumnWidth);
       if(this.columns.count !== numberOfColumns) {
+        this.renderUI();
         var yOffset = window.pageYOffset;
         this.columns.count = numberOfColumns;
         this.displayPhotos()
@@ -107,16 +140,13 @@
 
   function buildGiphyUrl(apiKey, options) {
     var url = 'http://api.giphy.com/v1/gifs/search?api_key=' + apiKey;
-    options.q = options.q ? options.q.split(' ').join('+') : '';
     for(var key in options) {
-      url += '&' + key + '=' + options[key];
+      var value = options[key];
+      if(key === 'q') {
+        value = value ? options.q.split(' ').join('+') : '';
+      }
+      url += '&' + key + '=' + value;
     }
     return url;
-  }
-
-  function setPhotoContainerMargins(margin) {
-    if(margin) {
-      return '0px ' + margin / 2 + 'px ' + margin + 'px ' + margin / 2 + 'px';
-    }
   }
 }());
