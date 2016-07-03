@@ -18,17 +18,16 @@
     this.appendedPhotos = 0;
     this.initializeWindowEventHandlers();
     this.renderUI();
+    this.getPhotos();
   }
 
   this.GiphyFeed.prototype.renderUI = function() {
     this.columns.heightRatios = [];
     this.columns.elements = [];
-    this.photoData = [];
     this.appendedPhotos = 0;
     this.clearElements();
     this.makeSearchForm();
     this.makeColumnElements();
-    this.getPhotos();
   }
 
   this.GiphyFeed.prototype.makeSearchForm = function() {
@@ -92,14 +91,14 @@
     this.columns.elements[columnIndex].appendChild(div);
   }
 
-  this.GiphyFeed.prototype.getPhotos = function() {
+  this.GiphyFeed.prototype.getPhotos = function(offset) {
     this.isLoadingImages = true;
     var giphyURl = buildGiphyUrl(this.apiKey, this.giphyApiOptions, this.appendedPhotos);
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
       if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
         var data = JSON.parse(xmlHttp.responseText).data
-        this.displayPhotos(data);
+        this.displayPhotos(data, offset);
       }
       if(xmlHttp.readyState == 4) {
         this.isLoadingImages = false;
@@ -109,9 +108,10 @@
     xmlHttp.send(null);
   }
 
-  this.GiphyFeed.prototype.displayPhotos = function(data) {
+  this.GiphyFeed.prototype.displayPhotos = function(data, offset) {
+    var offset = offset || 0;
     if (data) { this.photoData = this.photoData.concat(data) }
-    for(var i = 0; i < this.photoData.length; i++) {
+    for(var i = offset; i < this.photoData.length; i++) {
       var smallestColumnIndex = this.columns.heightRatios.indexOf(Math.min.apply(Math, this.columns.heightRatios));
       this.makePhotoElement(this.photoData[i], smallestColumnIndex);
     }
@@ -130,14 +130,15 @@
         this.renderUI();
         var yOffset = window.pageYOffset;
         this.columns.count = numberOfColumns;
-        this.displayPhotos()
+        this.displayPhotos(undefined, this.appendedPhotos)
         window.scrollTo(0, yOffset);
       }
     }.bind(this);
+
     if(this.infiniteScroll) {
       window.onscroll = function(ev) {
         if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight && !this.isLoadingImages) {
-          this.getPhotos();
+          this.getPhotos(this.appendedPhotos);
         }
       }.bind(this);
     }
