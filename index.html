@@ -20,7 +20,10 @@
       var giphyFeed = new GiphyFeed({
         apiKey: 'dc6zaTOxFJmzC',
         minColumnWidth: 300,
-        searchTerm: 'cucumber cat'
+        giphyApiOptions: {
+          q: 'working',
+          limit: 20,
+        }
       }, document.getElementById('giphyFeed'));
 
       var pureBox = new PureBox({
