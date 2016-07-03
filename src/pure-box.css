@@ -9,11 +9,25 @@ body {
   font-family: helvetica;
   font-size: 16px;
 }
+h1 {
+  font-size: 40px;
+  text-transform: uppercase;
+  padding:10px;
+  color:#444;
+  text-Shadow: 1px 1px 0px #6FE192, 2px 2px 0px rgba(107, 37, 207,.8)
+}
+h1 a {
+  color: #444;
+  text-decoration: none;
+}
 
+  /*color: #6FE192;
+  text-Shadow: 1px 1px 0px rgba(79,185,255,.8), 2px 4px 0px rgba(107, 37, 207,.8);*/
 .container {
   width:100%;
-  padding: 0 20px;
+  padding: 10px;
 }
+
 #giphyFeed .column {
   float: left;
 }
