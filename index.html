@@ -11,7 +11,7 @@
   <body>
     <div class="container">
       <h1><a href="https://github.com/mikejonas/giphy-feed-js">GiphyFeed.JS</a></h1>
-      <div id="giphyFeed"></div>
+      <div id="giphyFeed" class="group"></div>
     </div>
 
     <script src="/src/giphy-feed.js"></script>
@@ -21,6 +21,7 @@
         apiKey: 'dc6zaTOxFJmzC',
         minColumnWidth: 300,
         photoMargin: 15,
+        infiniteScroll: true,
         giphyApiOptions: {
           q: 'working',
           limit: 25,
