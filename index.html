@@ -4,27 +4,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="width=device-width, initial-scale=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pure Box - a modern javascript lightbox script</title>
+    <title>giphyfeed.js - </title>
     <link href="/src/pure-box.css" rel="stylesheet">
   </head>
 
   <body>
     <div class="container">
-      <h1>Pure Box Demo</h1>
-      <div id="instagramFeed"></div>
+      <h1>Giphy Feed JS</h1>
+      <div id="giphyFeed"></div>
     </div>
 
-    <script src="/src/instagram-feed.js"></script>
+    <script src="/src/giphy-feed.js"></script>
     <script src="/src/pure-box.js"></script>
     <script type="text/javascript">
-      var instagramFeed = new InstagramFeed({
-        clientId: 'your_instagram_client_id',
-        redirectUri: 'your_instagram_redirectUri',
+      var giphyFeed = new GiphyFeed({
+        apiKey: 'dc6zaTOxFJmzC',
         minColumnWidth: 300,
-      }, document.getElementById('instagramFeed'));
+        searchTerm: 'cucumber cat'
+      }, document.getElementById('giphyFeed'));
 
       var pureBox = new PureBox({
-      }, document.getElementById('instagramFeed'));
+      }, document.getElementById('giphyFeed'));
     </script>
   </body>
 </html>

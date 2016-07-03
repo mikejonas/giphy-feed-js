@@ -14,16 +14,16 @@ body {
   width:100%;
   padding: 0 20px;
 }
-#instagramFeed .column {
+#giphyFeed .column {
   float: left;
   padding: 10px;
 }
-#instagramFeed img {
+#giphyFeed img {
   display: block;
   width:100%;
   height: auto;
 }
-.instagram-photo {
+.photo-container {
   box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.17);
   margin-bottom: 20px;
 }
@@ -92,25 +92,3 @@ body {
   top: 50%;
   transform: translateY(-50%);
 }
-
-/*@media (max-width: 1000px) {
-  #instagramFeed {
-    -webkit-column-count: 3;
-    -moz-column-count:    3;
-    column-count:         3;
-  }
-}
-@media (max-width: 800px) {
-  #instagramFeed {
-  -moz-column-count:    2;
-  -webkit-column-count: 2;
-  column-count:         2;
-  }
-}
-@media (max-width: 400px) {
-  #instagramFeed {
-  -moz-column-count:    1;
-  -webkit-column-count: 1;
-  column-count:         1;
-  }
-}*/
