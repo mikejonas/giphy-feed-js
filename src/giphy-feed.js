@@ -14,29 +14,8 @@
       count: 0
     };
     this.appendedPhotos = 0;
-    this.windowResizeHandler();
+    this.initializeWindowEventHandlers();
     this.renderUI();
-  }
-
-  this.GiphyFeed.prototype.getPhotos = function() {
-    var giphyURl = buildGiphyUrl(this.apiKey, this.giphyApiOptions);
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-        var data = JSON.parse(xmlHttp.responseText).data
-        this.displayPhotos(data);
-      }
-    }.bind(this);
-    xmlHttp.open("GET", giphyURl, true); // true for asynchronous
-    xmlHttp.send(null);
-  }
-
-  this.GiphyFeed.prototype.displayPhotos = function(data) {
-    if (data) { this.photoData = data; }
-    for(var i = 0; i < this.photoData.length; i++) {
-      var smallestColumnIndex = this.columns.heightRatios.indexOf(Math.min.apply(Math, this.columns.heightRatios));
-      this.makePhotoElement(this.photoData[i], smallestColumnIndex);
-    }
   }
 
   this.GiphyFeed.prototype.renderUI = function() {
@@ -44,7 +23,6 @@
     this.makeSearchForm();
     this.makeColumnElements();
     this.getPhotos();
-
   }
 
   this.GiphyFeed.prototype.makeSearchForm = function() {
@@ -111,13 +89,34 @@
     this.columns.elements[columnIndex].appendChild(div);
   }
 
+  this.GiphyFeed.prototype.getPhotos = function() {
+    var giphyURl = buildGiphyUrl(this.apiKey, this.giphyApiOptions, this.appendedPhotos);
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        var data = JSON.parse(xmlHttp.responseText).data
+        this.displayPhotos(data);
+      }
+    }.bind(this);
+    xmlHttp.open("GET", giphyURl, true); // true for asynchronous
+    xmlHttp.send(null);
+  }
+
+  this.GiphyFeed.prototype.displayPhotos = function(data) {
+    if (data) { this.photoData = data; }
+    for(var i = 0; i < this.photoData.length; i++) {
+      var smallestColumnIndex = this.columns.heightRatios.indexOf(Math.min.apply(Math, this.columns.heightRatios));
+      this.makePhotoElement(this.photoData[i], smallestColumnIndex);
+    }
+  }
+
   this.GiphyFeed.prototype.clearElements = function() {
     while (this.appContainer.firstChild) {
       this.appContainer.removeChild(this.appContainer.firstChild);
     }
   }
 
-  this.GiphyFeed.prototype.windowResizeHandler = function() {
+  this.GiphyFeed.prototype.initializeWindowEventHandlers = function() {
     window.onresize = function(e) {
       var numberOfColumns = Math.floor(this.appContainer.offsetWidth / this.minColumnWidth);
       if(this.columns.count !== numberOfColumns) {
@@ -128,6 +127,13 @@
         window.scrollTo(0, yOffset);
       }
     }.bind(this);
+
+    window.onscroll = function(ev) {
+      if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
+        this.getPhotos();
+      }
+    }.bind(this);
+
   }
 
 
@@ -138,7 +144,7 @@
     return tags.map(function(tag) {return '#' + tag }).join(' ')
   }
 
-  function buildGiphyUrl(apiKey, options) {
+  function buildGiphyUrl(apiKey, options, offset) {
     var url = 'http://api.giphy.com/v1/gifs/search?api_key=' + apiKey;
     for(var key in options) {
       var value = options[key];
@@ -147,6 +153,7 @@
       }
       url += '&' + key + '=' + value;
     }
+    url += '&offset=' + offset;
     return url;
   }
 }());
