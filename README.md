@@ -2,8 +2,10 @@
 
 ###[DEMO](http://mikejonas.com/giphy-feed)
 
-* giphy-feed.js - A vinalla javascript implementation of an infinite scrolling masonry grid layout.
-* pure-box.js - A vinalla javascript lightbox that works great on its own.
+This library contains three elements:
+* [giphy-feed.js](https://github.com/mikejonas/giphy-feed-js/blob/master/src/giphy-feed.js) - A vinalla javascript implementation of an infinite scrolling responsive masonry grid layout
+* [pure-box.js](https://github.com/mikejonas/giphy-feed-js/blob/master/src/pure-box.js) - A vinalla javascript lightbox that works great on its own
+* [giphy](https://github.com/Giphy/GiphyAPI)
 
 ## Usage
 
