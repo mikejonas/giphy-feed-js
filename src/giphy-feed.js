@@ -139,8 +139,8 @@
     window.onresize = function() {
       var numberOfColumns = Math.floor(this.appContainer.offsetWidth / this.minColumnWidth);
       if (this.columns.count !== numberOfColumns) {
-        this.renderUI();
         var yOffset = window.pageYOffset;
+        this.renderUI();
         this.columns.count = numberOfColumns;
         this.displayPhotos();
         window.scrollTo(0, yOffset);
