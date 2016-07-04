@@ -48,13 +48,7 @@
     input.value = this.giphyApiOptions.q;
     this.appContainer.appendChild(form);
 
-    form.onsubmit = function(e) {
-      if (this.giphyApiOptions.q !== input.value) {
-        this.giphyApiOptions.q = input.value;
-        this.renderUI(true);
-      }
-      return false;
-    }.bind(this);
+    form.addEventListener('submit', this.giphySearchHandler.bind(this, input));
   };
 
   this.GiphyFeed.prototype.makeColumnElements = function() {
@@ -136,23 +130,35 @@
   };
 
   this.GiphyFeed.prototype.initializeWindowEventHandlers = function() {
-    window.onresize = function() {
-      var numberOfColumns = Math.floor(this.appContainer.offsetWidth / this.minColumnWidth);
-      if (this.columns.count !== numberOfColumns) {
-        var yOffset = window.pageYOffset;
-        this.renderUI();
-        this.columns.count = numberOfColumns;
-        this.displayPhotos();
-        window.scrollTo(0, yOffset);
-      }
-    }.bind(this);
-
+    window.addEventListener('resize', this.renderGridOnWindowSizeEventHandler.bind(this));
     if (this.infiniteScroll) {
-      window.onscroll = function() {
-        if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight && !this.isLoadingImages) {
-          this.getPhotos(this.appendedPhotos);
-        }
-      }.bind(this);
+      window.addEventListener('scroll', this.infiniteScrollEventHandler.bind(this));
+    }
+  };
+
+  // Event listener funtions
+  this.GiphyFeed.prototype.giphySearchHandler = function(input, e) {
+    e.preventDefault();
+    if (this.giphyApiOptions.q !== input.value) {
+      this.giphyApiOptions.q = input.value;
+      this.renderUI(true);
+    }
+  };
+
+  this.GiphyFeed.prototype.renderGridOnWindowSizeEventHandler = function() {
+    var numberOfColumns = Math.floor(this.appContainer.offsetWidth / this.minColumnWidth);
+    if (this.columns.count !== numberOfColumns) {
+      var yOffset = window.pageYOffset;
+      this.renderUI();
+      this.columns.count = numberOfColumns;
+      this.displayPhotos();
+      window.scrollTo(0, yOffset);
+    }
+  };
+
+  this.GiphyFeed.prototype.infiniteScrollEventHandler = function() {
+    if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight && !this.isLoadingImages) {
+      this.getPhotos(this.appendedPhotos);
     }
   };
 

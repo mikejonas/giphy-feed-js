@@ -3,20 +3,7 @@
     this.appContainer = appContainer || document.body;
     this.photos = [];
     this.currentPhotoIndex = 0;
-    this.initializeAppContainerClickHandler();
-  };
-
-  this.PureBox.prototype.initializeAppContainerClickHandler = function() {
-    this.appContainer.onclick = function(e) {
-      var element = e.target;
-      while (element && !element.matches('.pure-box') && element !== this.appContainer) {
-        element = element.parentElement;
-      }
-      if (element && element.matches('.pure-box')) {
-        e.preventDefault();
-        this.openLightBox(element);
-      }
-    }.bind(this);
+    this.appContainer.addEventListener('click', this.openLightBoxClickHandler.bind(this));
   };
 
   this.PureBox.prototype.openLightBox = function(element) {
@@ -34,7 +21,7 @@
 
   this.PureBox.prototype.closeLightBox = function(element) {
     element.parentElement.removeChild(element);
-    document.onkeydown = null;
+    document.removeEventListener('keydown', this.boundLightBoxKeyPressHandler);
   };
 
   this.PureBox.prototype.createLightBoxElement = function(element) {
@@ -75,30 +62,11 @@
   };
 
   this.PureBox.prototype.initializelightBoxEventHandlers = function(overlayDiv) {
-    overlayDiv.onclick = function(e) {
-      if (e.target.matches('.pure-box-overlay') || e.target.matches('.pure-box-image')) {
-        this.closeLightBox(overlayDiv);
-      }
-      if (e.target.matches('.next') || e.target.matches('.prev')) {
-        this.navigateToImage(overlayDiv, e.target.matches('.next'));
-      }
-    }.bind(this);
-
-    document.onkeydown = function(e) {
-      // 37: left arrow. 39: right arrow. 27: escape key.
-      if (e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 27) {
-        e.preventDefault();
-      }
-      if (e.keyCode === 37) {
-        this.navigateToImage(overlayDiv, false);
-      }
-      if (e.keyCode === 39) {
-        this.navigateToImage(overlayDiv, true);
-      }
-      if (e.keyCode === 27) {
-        this.closeLightBox(overlayDiv);
-      }
-    }.bind(this);
+    // assign binded function to boundLightBoxKeyPressHandler so
+    // the event can later be removed
+    this.boundLightBoxKeyPressHandler = this.lightBoxKeyPressHandler.bind(this, overlayDiv);
+    overlayDiv.addEventListener('click', this.lightBoxClickHandler.bind(this, overlayDiv));
+    document.addEventListener('keydown', this.boundLightBoxKeyPressHandler);
   };
 
   this.PureBox.prototype.navigateToImage = function(overlayDiv, goForward) {
@@ -118,5 +86,42 @@
     var caption = overlayDiv.getElementsByClassName('pure-box-caption')[0];
     image.style.backgroundImage = "url('" + nextImage.href + "')";
     caption.innerText = nextImage.title;
+  };
+
+  // Event listener funtions
+  this.PureBox.prototype.openLightBoxClickHandler = function(e) {
+    var element = e.target;
+    while (element && !element.matches('.pure-box') && element !== this.appContainer) {
+      element = element.parentElement;
+    }
+    if (element && element.matches('.pure-box')) {
+      e.preventDefault();
+      this.openLightBox(element);
+    }
+  };
+
+  this.PureBox.prototype.lightBoxClickHandler = function(overlayDiv, e) {
+    if (e.target.matches('.pure-box-overlay') || e.target.matches('.pure-box-image')) {
+      this.closeLightBox(overlayDiv);
+    }
+    if (e.target.matches('.next') || e.target.matches('.prev')) {
+      this.navigateToImage(overlayDiv, e.target.matches('.next'));
+    }
+  };
+
+  this.PureBox.prototype.lightBoxKeyPressHandler = function(overlayDiv, e) {
+    // 37: left arrow. 39: right arrow. 27: escape key.
+    if (e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 27) {
+      e.preventDefault();
+    }
+    if (e.keyCode === 37) {
+      this.navigateToImage(overlayDiv, false);
+    }
+    if (e.keyCode === 39) {
+      this.navigateToImage(overlayDiv, true);
+    }
+    if (e.keyCode === 27) {
+      this.closeLightBox(overlayDiv);
+    }
   };
 }());
