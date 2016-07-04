@@ -91,7 +91,6 @@
     img.onmouseover = this.animateImage.bind(img, true);
     img.onmouseout = this.animateImage.bind(img, false);
     img.onclick = this.animateImage.bind(img, false);
-
     img.height = imageThumbnail.height;
     img.width = imageThumbnail.width;
 

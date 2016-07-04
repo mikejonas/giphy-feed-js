@@ -1,5 +1,5 @@
 (function() {
-  this.PureBox = function(options, appContainer) {
+  this.PureBox = function(appContainer) {
     this.appContainer = appContainer || document.body;
     this.photos = [];
     this.currentPhotoIndex = 0;
@@ -29,7 +29,7 @@
         return a.dataset.index - b.dataset.index;
       });
     }
-    this.currentPhotoIndex = element.dataset.index || this.photos.indexOf(element);
+    this.currentPhotoIndex = parseInt(element.dataset.index, 10) || this.photos.indexOf(element);
   };
 
   this.PureBox.prototype.closeLightBox = function(element) {
