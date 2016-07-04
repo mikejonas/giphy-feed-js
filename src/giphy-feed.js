@@ -86,11 +86,21 @@
     a.setAttribute('data-index', this.appendedPhotos++);
     a.appendChild(img);
     img.src = imageThumbnail.url;
+    img.setAttribute('data-static', imageThumbnail.url);
+    img.setAttribute('data-animated', imageFull.url);
+    img.onmouseover = this.animateImage.bind(img, true);
+    img.onmouseout = this.animateImage.bind(img, false);
+    img.onclick = this.animateImage.bind(img, false);
+
     img.height = imageThumbnail.height;
     img.width = imageThumbnail.width;
 
     this.columns.heightRatios[columnIndex] += parseInt(imageThumbnail.height, 10) / parseInt(imageThumbnail.width, 10);
     this.columns.elements[columnIndex].appendChild(div);
+  };
+
+  this.GiphyFeed.prototype.animateImage = function(animate) {
+    this.src = animate ? this.dataset.animated : this.dataset.static;
   };
 
   this.GiphyFeed.prototype.getPhotos = function() {
