@@ -29,8 +29,6 @@ var giphyFeed = new GiphyFeed({
 var pureBox = new PureBox(document.getElementById('giphyFeed')); //replace this with desired container
 ```
 
-Replace the contents of `README.md` with your project's:
-
 ## Support
 
 Please [open an issue](https://github.com/mikejonas/giphy-feed-js/issues/new) for support.
