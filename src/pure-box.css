@@ -61,6 +61,7 @@ h1 a {
   padding: 0 20px;
   border: none;
   cursor: pointer;
+  z-index: 10;
 }
 
 .container {
